@@ -21,26 +21,33 @@ app.post('/stripe-payment', (req, res) => {
     return stripe.customers.create({
         email: token.email,
         source: token.id,
-        name: 'Raj',
+        name: token.card.name,
+        address: {
+            line1: '510 Townsend St',
+            postal_code: '452009',
+            city: 'Indore',
+            state: 'MP',
+            country: 'IN',
+        },
         shipping: {
             name: 'Raj',
             address: {
-                city: 'indore',
-                country: 'India'
+                city: 'new york',
+                country: 'usa'
             }
         }
     }).then(customer => {
         stripe.charges.create({
             amount: total * 100,
-            currency: 'usd',
+            currency: 'inr',
             customer: customer.id,
             receipt_email: token.email,
             description: 'Description about the product purchased',
             shipping: {
-                name: token.card.name,
+                name: "Raj",
                 address: {
-                    city: 'indore',
-                    country: 'India'
+                    city: 'new york',
+                    country: 'usa'
                 }
             }
         }, { idempotencyKey })
